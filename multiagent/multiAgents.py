@@ -298,7 +298,7 @@ def betterEvaluationFunction(currentGameState):
     """
     "*** YOUR CODE HERE ***"
 
-    def _scoreFromGhost(gameState):
+    def scoreFromGhost(gameState):
       score = 0
       for ghost in gameState.getGhostStates():
         disGhost = manhattanDistance(gameState.getPacmanPosition(), ghost.getPosition())
@@ -326,7 +326,7 @@ def betterEvaluationFunction(currentGameState):
       else:
         return 0
     score = currentGameState.getScore()
-    scoreGhosts = _scoreFromGhost(currentGameState)
+    scoreGhosts = scoreFromGhost(currentGameState)
     scoreFood = _scoreFromFood(currentGameState)
     scoreCapsules = _scoreFromCapsules(currentGameState)
     
