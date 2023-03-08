@@ -11,6 +11,9 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
+# Name - Sandeep Kaur
+# Student No - 301459836
+
 
 from util import manhattanDistance
 from game import Directions
@@ -308,7 +311,7 @@ def betterEvaluationFunction(currentGameState):
           score -= pow(max(7 - disGhost, 0), 2)
       return score
 
-    def _scoreFromFood(gameState):
+    def scoreFromFood(gameState):
       disFood = []
       for food in gameState.getFood().asList():
         disFood.append(1.0/manhattanDistance(gameState.getPacmanPosition(), food))
@@ -317,7 +320,7 @@ def betterEvaluationFunction(currentGameState):
       else:
         return 0
 
-    def _scoreFromCapsules(gameState):
+    def scoreFromCapsules(gameState):
       score = []
       for Cap in gameState.getCapsules():
         score.append(50.0/manhattanDistance(gameState.getPacmanPosition(), Cap))
@@ -327,8 +330,8 @@ def betterEvaluationFunction(currentGameState):
         return 0
     score = currentGameState.getScore()
     scoreGhosts = scoreFromGhost(currentGameState)
-    scoreFood = _scoreFromFood(currentGameState)
-    scoreCapsules = _scoreFromCapsules(currentGameState)
+    scoreFood = scoreFromFood(currentGameState)
+    scoreCapsules = scoreFromCapsules(currentGameState)
     
     return score + scoreGhosts + scoreFood + scoreCapsules
 
