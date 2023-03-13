@@ -65,8 +65,8 @@ class ValueIterationAgent(ValueEstimationAgent):
         for state in self.mdp.getStates():
             self.values[state] = 0 
 
-        for iteration in range(self.iterations):
-            tempStateValues = {}
+        for iteration in range(self.iterations): #iterating over
+            tempStateValues = util.Counter()
             for state in self.mdp.getStates():
                 max = float("-inf")
                 actions = self.mdp.getPossibleActions(state)
@@ -77,7 +77,7 @@ class ValueIterationAgent(ValueEstimationAgent):
                     if qvalue > max:
                         max = qvalue
                         tempStateValues[state]=qvalue #updating q value
-            self.values = tempStateValues
+            self.values = tempStateValues #updating tempvalues into self.values for each iteration at the end
            
                     # print("action",action)
                     # print(self.mdp.getTransitionStatesAndProbs(state, action))
@@ -102,7 +102,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         for nextState,probability in self.mdp.getTransitionStatesAndProbs(state,action):
             reward = self.mdp.getReward(state, action, nextState)
             nextStateValue = self.getValue(nextState)
-            qvalue += probability*(reward + self.discount*nextStateValue)
+            qvalue += probability*(reward + self.discount*nextStateValue) #Q(s,a) equation
         return qvalue
         # print("action",action)
         # print(self.mdp.getTransitionStatesAndProbs(state, action))
@@ -122,13 +122,13 @@ class ValueIterationAgent(ValueEstimationAgent):
         """
         "*** YOUR CODE HERE ***"
         bestAction = None
-        if self.mdp.isTerminal(state):
+        if self.mdp.isTerminal(state): #if terminal state
             return bestAction
         actions = self.mdp.getPossibleActions(state)
         max = float("-inf")
         for action in actions:
             qvalue = self.computeQValueFromValues(state,action)
-            if qvalue > max:
+            if qvalue > max: #getting maximum q value
                 max = qvalue
                 bestAction = action
             if qvalue == max: # if tie
@@ -182,15 +182,15 @@ class AsynchronousValueIterationAgent(ValueIterationAgent):
         for state in self.mdp.getStates():
             self.values[state] = 0
         for iteration in range(self.iterations):
-            state  = states[iteration % len(states)]
+            state  = states[iteration % len(states)] #changing iteration over each state 
             max = float("-inf")
             actions = self.mdp.getPossibleActions(state)
             if not self.mdp.isTerminal(state):
-                for action in actions:
+                for action in actions: 
                         qvalue = self.computeQValueFromValues(state,action)
-                        if qvalue > max:
+                        if qvalue > max: #getting maximum q value
                             max = qvalue
-                self.values[state]=max
+                self.values[state]=max #update value for each state
 
 
 class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
@@ -215,6 +215,7 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
         "*** YOUR CODE HERE ***"
         predecessor = util.Counter()
         
+        #followed the given pseudocode in question
         #computing predecessor of states
         for state in self.mdp.getStates():
             predecessor[state] = set()
@@ -227,6 +228,7 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
         
         print(predecessor)
 
+       
         for state in self.mdp.getStates():
             max = float("-inf")
             if not self.mdp.isTerminal(state):
