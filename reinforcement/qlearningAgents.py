@@ -53,7 +53,7 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         "*** YOUR CODE HERE ***"
-        return self.qvalue[(state,action)]
+        return self.qvalue[(state,action)] 
         util.raiseNotDefined()
 
 
@@ -203,6 +203,11 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         "*** YOUR CODE HERE ***"
+        self.qvalue[(state,action)] = 0.0
+        features = self.featExtractor.getFeatures(state,action)
+        for key in features:
+          self.qvalue[(state,action)] += self.weights[key]*features[key]
+        return self.qvalue[(state,action)]
         util.raiseNotDefined()
 
     def update(self, state, action, nextState, reward):
@@ -210,7 +215,13 @@ class ApproximateQAgent(PacmanQAgent):
            Should update your weights based on transition
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        oldEstimate = self.getQValue(state, action)
+        sample = reward+ self.discount * self.getValue(nextState)  #new sample estimate
+        learningRate = self.alpha
+        difference = sample - oldEstimate
+        features = self.featExtractor.getFeatures(state,action)
+        for key in features:
+          self.weights[key] += learningRate * difference * features[key]
 
     def final(self, state):
         "Called at the end of each game."
